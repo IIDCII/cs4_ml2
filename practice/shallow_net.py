@@ -2,7 +2,8 @@ import numpy as np
 
 # 1 with 2 features (assuming features is columns)
 inputs = np.array([[0.05, 0.1]])
-y = np.array([0.5, 0.5])
+y = np.array([0.67, 0.33])
+test_data = np.array([[667, 43]])
 
 # bias set to col 0
 weights = np.array(
@@ -50,10 +51,11 @@ def backward_pass(inputs, weights, y, y_hat, h, f0, f1):
 
     return dL_dw
 
+# update weights
 def update_weights(weights, dL_dw, lr = 0.5):
     return weights - lr * dL_dw
 
-
+# training
 def training(inputs, weights, y, lr = 0.5, epochs = 1000):
     for epoch in range(epochs):
         lr = lr * 0.999
@@ -62,8 +64,12 @@ def training(inputs, weights, y, lr = 0.5, epochs = 1000):
         weights = update_weights(weights, dL_dw, lr)
         if epoch % 100 == 0:
             print ("epoch: ", epoch, "loss: ", loss)
-    
-    print (y_hat)
     return weights
 
+def testing(inputs, weights):
+    y_hat, loss, h, f0, f1 = forward_pass(inputs, weights)
+    print("y_hat: ", y_hat)
+    print("loss: ", loss)
+
 weights = training(inputs, weights, y)
+testing(test_data, weights)
